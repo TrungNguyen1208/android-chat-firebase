@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "623527982607",
+    "firebase_url": "https://chat-d2aa0.firebaseio.com",
+    "project_id": "chat-d2aa0",
+    "storage_bucket": "chat-d2aa0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623527982607:android:b8c4aa9c550df553",
+        "android_client_info": {
+          "package_name": "ptit.nttrung.chatusefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623527982607-43ql3m33gkaevan96au6e82fpl2i54v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ptit.nttrung.chatusefirebase",
+            "certificate_hash": "13c12c87409d15b544dd8286d86ce6b697b7202f"
+          }
+        },
+        {
+          "client_id": "623527982607-t68mods6gqa9h8mrjemrl0m50amcdarr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSvdOsw-R1UC1Cxh77W5i3qa2trGrTnRw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623527982607-t68mods6gqa9h8mrjemrl0m50amcdarr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

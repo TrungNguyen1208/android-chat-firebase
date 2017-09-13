@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ChatUseFirebase</string>
+
+    <string name="input_email_register">Nhập Email Đăng Ký</string>
+    <string name="input_pass">Nhập Mật Khẩu</string>
+    <string name="note_register">Vui lòng đăng ký với email mà bạn sử dụng để xác nhận và tránh các sự cố về tài khoản!</string>
+    <string name="backtologin">Quay Lại</string>
+    <string name="register_account">Đăng Ký Tài Khoản</string>
+    <string name="lostpass">Mất Mật Khẩu?</string>
+    <string name="input_email">Nhập Email</string>
+    <string name="login_title">Đăng Nhập</string>
+    <string name="fblogin">Đăng Nhập FaceBook</string>
+    <string name="register_new">Đăng Ký Mới</string>
+    <string name="verifiation">Truy cập Email để xác thực tài khoản</string>
+    <string name="email_error">Email không đúng định dạng!</string>
+    <string name="pass_erro">Mật khẩu quá ngắn!</string>
+    <string name="msg_login_success">Đăng nhập thành công!</string>
+</resources>
