@@ -1,4 +1,4 @@
-package ptit.nttrung.chatusefirebase.view;
+package ptit.nttrung.chatusefirebase.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,21 +76,22 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void registerSuccess() {
                 hideProgressDialog();
-                onSignupSuccess();
+                setResult(RESULT_OK, null);
                 Toast.makeText(SignUpActivity.this, "Sign Up Succesfull", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void registerComplete() {
+                hideProgressDialog();
+                Toast.makeText(SignUpActivity.this, "Resgiter fail. Email exist", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void registerFailure(String message) {
                 hideProgressDialog();
+                Log.e(TAG, message);
             }
         });
-    }
-
-
-    public void onSignupSuccess() {
-        setResult(RESULT_OK, null);
-//        finish();
     }
 
     public boolean validate() {

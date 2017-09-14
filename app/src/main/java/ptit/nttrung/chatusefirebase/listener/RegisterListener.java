@@ -6,5 +6,7 @@ package ptit.nttrung.chatusefirebase.listener;
 
 public interface RegisterListener {
     void registerSuccess();
+
+    void registerComplete();
     void registerFailure(String message);
 }

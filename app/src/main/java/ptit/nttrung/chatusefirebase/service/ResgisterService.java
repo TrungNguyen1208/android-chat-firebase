@@ -5,18 +5,16 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 
 import ptit.nttrung.chatusefirebase.base.BaseFirebase;
-import ptit.nttrung.chatusefirebase.define.Constants;
+import ptit.nttrung.chatusefirebase.data.define.Constants;
 import ptit.nttrung.chatusefirebase.listener.RegisterListener;
-import ptit.nttrung.chatusefirebase.model.UserDb;
+import ptit.nttrung.chatusefirebase.model.User;
 
 /**
  * Created by TrungNguyen on 9/12/2017.
@@ -49,49 +47,35 @@ public class ResgisterService extends BaseFirebase {
                         if (task.isSuccessful()) {
                             final FirebaseUser userFB = task.getResult().getUser();
                             if (userFB != null) {
-                                //Luu ten
-                                UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(name)
-                                        .build();
-
-                                userFB.updateProfile(profileUpdate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                //Save user into Firebase database
+                                User users = new User();
+                                users.setUid(userFB.getUid());
+                                users.setName(name);
+                                users.setEmail(userFB.getEmail());
+                                createAccountInDatabase(users, new RegisterListener() {
                                     @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            //Tiến hành thông tin user vào Database
-                                            UserDb users = new UserDb();
-                                            users.setUid(userFB.getUid());
-                                            users.setName(name);
-                                            users.setEmail(userFB.getEmail());
-                                            createAccountInDatabase(users, new RegisterListener() {
-                                                @Override
-                                                public void registerSuccess() {
-                                                    // Đăng xuất.
-                                                    auth.signOut();
-                                                    listener.registerSuccess();
-                                                }
+                                    public void registerSuccess() {
+                                        // Đăng xuất.
+                                        auth.signOut();
+                                        listener.registerSuccess();
+                                    }
 
-                                                @Override
-                                                public void registerFailure(String message) {
-                                                    listener.registerFailure(message);
-                                                }
-                                            });
-                                        }
+                                    @Override
+                                    public void registerComplete() {
+                                        listener.registerComplete();
+                                    }
+
+
+                                    @Override
+                                    public void registerFailure(String message) {
+                                        listener.registerFailure(message);
                                     }
                                 });
-
-
-                                //Gửi 1 email xác thực tài khoản
-//                                userFB.sendEmailVerification().addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            //Tiến hành thông tin user vào Database
-//                                        }
-//                                    }
-//                                });
+                            } else {
+                                listener.registerComplete();
                             }
                         }
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -106,21 +90,27 @@ public class ResgisterService extends BaseFirebase {
      *
      * @param users
      */
-    public void createAccountInDatabase(UserDb users, final RegisterListener listener) {
-        mDatabase.child(Constants.USERS)
+    public void createAccountInDatabase(User users, final RegisterListener listener) {
+        users.setAvata(Constants.STR_DEFAULT_AVATAR);
+        mDatabase.child(Constants.DB_USERS)
                 .child(users.getUid())
                 .setValue(users)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        listener.registerSuccess();
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            listener.registerSuccess();
+                        } else {
+                            listener.registerComplete();
+                        }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                listener.registerFailure(e.getMessage());
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.registerFailure(e.getMessage());
+                    }
+                });
     }
 
 }

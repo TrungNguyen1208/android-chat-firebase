@@ -1,18 +1,22 @@
 <resources>
     <string name="app_name">ChatUseFirebase</string>
 
-    <string name="input_email_register">Nhập Email Đăng Ký</string>
-    <string name="input_pass">Nhập Mật Khẩu</string>
-    <string name="note_register">Vui lòng đăng ký với email mà bạn sử dụng để xác nhận và tránh các sự cố về tài khoản!</string>
-    <string name="backtologin">Quay Lại</string>
-    <string name="register_account">Đăng Ký Tài Khoản</string>
-    <string name="lostpass">Mất Mật Khẩu?</string>
-    <string name="input_email">Nhập Email</string>
-    <string name="login_title">Đăng Nhập</string>
-    <string name="fblogin">Đăng Nhập FaceBook</string>
-    <string name="register_new">Đăng Ký Mới</string>
-    <string name="verifiation">Truy cập Email để xác thực tài khoản</string>
-    <string name="email_error">Email không đúng định dạng!</string>
-    <string name="pass_erro">Mật khẩu quá ngắn!</string>
-    <string name="msg_login_success">Đăng nhập thành công!</string>
+    <string name="about">About</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_success">login success</string>
+    <string name="login">LOGIN</string>
+    <string name="Username">Email</string>
+    <string name="Password">Password</string>
+    <string name="forgot_your_password">Forgot your password ?</string>
+    <string name="go">GO</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="next">NEXT</string>
+    <string name="register">REGISTER</string>
+    <string name="wrong_email_or_pass">Wrong email or password</string>
+
+    <string name="hint_username">Enter a new username</string>
+    <string name="hint_email_reset">Enter your email</string>
+    <string name="enter_group_name">Enter group name</string>
+
+
 </resources>

@@ -6,5 +6,7 @@ package ptit.nttrung.chatusefirebase.listener;
 
 public interface LoginListener {
     void loginSuccess();
+
+    void loginComplete();
     void loginFailure(String message);
 }

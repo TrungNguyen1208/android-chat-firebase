@@ -1,4 +1,4 @@
-package ptit.nttrung.chatusefirebase.view;
+package ptit.nttrung.chatusefirebase.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +18,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ptit.nttrung.chatusefirebase.R;
 import ptit.nttrung.chatusefirebase.base.BaseActivity;
+import ptit.nttrung.chatusefirebase.data.define.StaticConfig;
 import ptit.nttrung.chatusefirebase.listener.LoginListener;
 import ptit.nttrung.chatusefirebase.service.LoginService;
 
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
 
     @BindView(R.id.input_email)
     EditText inputEmail;
@@ -38,11 +38,12 @@ public class LoginActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private LoginService loginService;
+    private boolean firstTimeAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
         initData();
@@ -50,11 +51,24 @@ public class LoginActivity extends BaseActivity {
 
     private void initData() {
         mAuth = FirebaseAuth.getInstance();
-        loginService = new LoginService();
+        firstTimeAccess = true;
+        loginService = new LoginService(this);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser userFB = firebaseAuth.getCurrentUser();
+                if (userFB != null) {
+                    // User is signed in
+                    StaticConfig.UID = userFB.getUid();
+                    Log.e(TAG, "onAuthStateChanged:signed_in:" + userFB.getUid());
+                    if (firstTimeAccess) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        LoginActivity.this.finish();
+                    } else {
+                        Log.d(TAG, "onAuthStateChanged:signed_out");
+                    }
+                    firstTimeAccess = false;
+                }
             }
         };
     }
@@ -81,26 +95,14 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.link_signup:
                 Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
+                startActivity(intent);
 //                finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                // TODO: Implement successful signup logic here
-
-            }
-        }
-    }
-
     public void login() {
-        Log.d(TAG, "Login");
-
         if (!validate()) {
             return;
         }
@@ -113,13 +115,21 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void loginSuccess() {
                 hideProgressDialog();
-                Toast.makeText(LoginActivity.this, getString(R.string.msg_login_success), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                LoginActivity.this.finish();
+                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void loginComplete() {
+                hideProgressDialog();
+                Toast.makeText(LoginActivity.this, getString(R.string.wrong_email_or_pass), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void loginFailure(String message) {
                 hideProgressDialog();
-                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, message);
             }
         });
     }
