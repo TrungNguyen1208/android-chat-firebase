@@ -1,4 +1,4 @@
-package ptit.nttrung.chatusefirebase.view.activities;
+package ptit.nttrung.chatusefirebase.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,8 +22,10 @@ import butterknife.OnClick;
 import ptit.nttrung.chatusefirebase.R;
 import ptit.nttrung.chatusefirebase.adapter.ViewPagerAdapter;
 import ptit.nttrung.chatusefirebase.base.BaseActivity;
-import ptit.nttrung.chatusefirebase.view.fragment.FriendsFragment;
-import ptit.nttrung.chatusefirebase.view.fragment.UserProfileFragment;
+import ptit.nttrung.chatusefirebase.data.define.StaticConfig;
+import ptit.nttrung.chatusefirebase.login.LoginActivity;
+import ptit.nttrung.chatusefirebase.main.friends.FriendsFragment;
+import ptit.nttrung.chatusefirebase.main.profile.UserProfileFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -68,7 +70,7 @@ public class MainActivity extends BaseActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-//                    StaticConfig.UID = user.getUid();
+                    StaticConfig.UID = user.getUid();
                 } else {
                     MainActivity.this.finish();
                     // User is signed in
