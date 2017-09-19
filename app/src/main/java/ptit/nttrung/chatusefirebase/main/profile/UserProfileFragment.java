@@ -31,6 +31,7 @@ import ptit.nttrung.chatusefirebase.data.prefence.PrefenceUserInfo;
 import ptit.nttrung.chatusefirebase.model.Configuration;
 import ptit.nttrung.chatusefirebase.model.User;
 import ptit.nttrung.chatusefirebase.ulti.ActivityUtils;
+import ptit.nttrung.chatusefirebase.ulti.RecyclerItemClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +39,11 @@ import ptit.nttrung.chatusefirebase.ulti.ActivityUtils;
 public class UserProfileFragment extends Fragment implements UserProfileContract.View {
 
     private static final String TAG = UserProfileFragment.class.getName();
+
+    private static final String USERNAME_LABEL = "Username";
+    private static final String EMAIL_LABEL = "Email";
+    private static final String SIGNOUT_LABEL = "Sign out";
+    private static final String RESETPASS_LABEL = "Change Password";
 
     @BindView(R.id.img_avatar)
     ImageView imgAvatar;
@@ -124,22 +130,27 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     @Override
     public void setAdapterData(List<Configuration> configurations) {
         infoAdapter = new UserInfoAdapter(getActivity(), configurations);
-        infoAdapter.setOnLabelItemnClick(new UserInfoAdapter.OnLabelItemnClick() {
-            @Override
-            public void onSignOutLabelClick() {
-                presenter.onSignOutClick();
-            }
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivityContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+                        String title = tvTitle.getText().toString();
+                        if (title.equals(SIGNOUT_LABEL)) {
+                            presenter.onSignOutClick();
+                        } else if (title.equals(USERNAME_LABEL)) {
+                            presenter.onUserNameLabelClick();
+                        } else if (title.equals(RESETPASS_LABEL)) {
+                            presenter.onResetPassLabelClick();
+                        }
+                    }
 
-            @Override
-            public void onUserNameLabelClick() {
-                presenter.onUserNameLabelClick();
-            }
+                    @Override
+                    public void onLongItemClick(View view, int position) {
 
-            @Override
-            public void onResetPassLabelClick() {
-                presenter.onResetPassLabelClick();
-            }
-        });
+                    }
+                })
+        );
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(layoutManager);

@@ -29,23 +29,10 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
 
     private List<Configuration> profileConfig;
     private Context context;
-    private OnLabelItemnClick onLabelItemnClick;
-
-    public interface OnLabelItemnClick {
-        public void onSignOutLabelClick();
-
-        public void onUserNameLabelClick();
-
-        public void onResetPassLabelClick();
-    }
 
     public UserInfoAdapter(Context context, List<Configuration> profileConfig) {
         this.profileConfig = profileConfig;
         this.context = context;
-    }
-
-    public void setOnLabelItemnClick(OnLabelItemnClick onLabelItemnClick) {
-        this.onLabelItemnClick = onLabelItemnClick;
     }
 
     public void notifyData(List<Configuration> profileConfig) {
@@ -68,19 +55,6 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         holder.imgIcon.setImageResource(config.getIcon());
         holder.tvTitle.setText(title);
         holder.tvDetail.setText(config.getValue());
-
-        holder.rlConfigItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (title.equals(SIGNOUT_LABEL)) {
-                    onLabelItemnClick.onSignOutLabelClick();
-                } else if (title.equals(USERNAME_LABEL)) {
-                    onLabelItemnClick.onUserNameLabelClick();
-                } else if (title.equals(RESETPASS_LABEL)) {
-                    onLabelItemnClick.onResetPassLabelClick();
-                }
-            }
-        });
     }
 
     @Override

@@ -124,6 +124,7 @@ public class ActivityUtils {
                              DialogInterface.OnClickListener no_onclicklistener) {
 
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
+        adb.setCancelable(true);
         if (hasTitle) {
             title = "";
             if (!title.isEmpty()) {
@@ -143,6 +144,7 @@ public class ActivityUtils {
                                        DialogInterface.OnClickListener yes_onclicklistener) {
 
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
+        adb.setCancelable(true);
         if (hasTitle) {
             title = "";
             if (!title.isEmpty()) {
