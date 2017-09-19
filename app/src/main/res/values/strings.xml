@@ -17,6 +17,9 @@
     <string name="hint_username">Enter a new username</string>
     <string name="hint_email_reset">Enter your email</string>
     <string name="enter_group_name">Enter group name</string>
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="dismiss">Dismiss</string>
 
 
 </resources>

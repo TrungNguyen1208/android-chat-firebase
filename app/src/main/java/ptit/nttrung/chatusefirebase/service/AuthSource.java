@@ -17,5 +17,7 @@ public interface AuthSource {
 
     Completable logUserOut();
 
+    Completable resetEmail(String email);
+
     Completable reauthenticateUser(String newPassword);
 }

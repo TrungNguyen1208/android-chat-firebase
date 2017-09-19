@@ -37,6 +37,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     private DatabaseSource databaseSource;
     private CompositeDisposable compositeDisposable;
     private Context context;
+    private PrefenceUserInfo prefenceUserInfo;
     private List<Configuration> listConfig = new ArrayList<>();
 
     private User myAccount;
@@ -47,6 +48,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
         this.view = view;
         this.context = context;
         this.compositeDisposable = new CompositeDisposable();
+        this.prefenceUserInfo = PrefenceUserInfo.getInstance(context);
         view.setPresenter(this);
     }
 
@@ -83,17 +85,16 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
 
     @Override
     public void onUserNameLabelClick() {
-        PrefenceUserInfo prefenceUserInfo = PrefenceUserInfo.getInstance(context);
-        view.showRenameDialog(prefenceUserInfo.getUserInfo().getName());
+        view.showRenameDialog(prefenceUserInfo.getUserInfo());
     }
 
     @Override
     public void onResetPassLabelClick() {
-
+        view.showOkCofimDialog();
     }
 
     @Override
-    public void onConfimRenameClick(String newName) {
+    public void onConfimRenameClick(final User myAccount, final String newName) {
         compositeDisposable.add(
                 databaseSource.changeNameUser(StaticConfig.UID, newName)
                         .subscribeOn(Schedulers.io())
@@ -101,12 +102,17 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
                         .subscribeWith(new DisposableCompletableObserver() {
                             @Override
                             public void onComplete() {
+                                myAccount.setName(newName);
+                                prefenceUserInfo.saveUserInfo(myAccount);
 
+                                view.setTextName(newName);
+                                listConfig = setupArrayListInfo(myAccount);
+                                view.notifyDataSetChanged(listConfig);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-
+                                Log.e("Rename Error", e.getMessage());
                             }
                         })
         );
@@ -136,6 +142,26 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void resetPassword(User myAccount) {
+        compositeDisposable.add(
+                authSource.resetEmail(myAccount.getEmail())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableCompletableObserver() {
+                            @Override
+                            public void onComplete() {
+                                view.showCofimDialogResetPass();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                view.showConfimDialogErrorSent();
+                            }
+                        })
+        );
+    }
+
+    @Override
     public User getUserInfoPrefence() {
         PrefenceUserInfo prefenceUserInfo = PrefenceUserInfo.getInstance(context);
         return prefenceUserInfo.getUserInfo();
@@ -157,8 +183,7 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
                                 view.notifyDataSetChanged(listConfig);
                                 view.setTextName(myAccount.getName());
 
-                                PrefenceUserInfo preUserInfo = PrefenceUserInfo.getInstance(context);
-                                preUserInfo.saveUserInfo(myAccount);
+                                prefenceUserInfo.saveUserInfo(myAccount);
                                 view.hideProgressDialog();
                             }
 
@@ -174,28 +199,4 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
                         })
         );
     }
-
-//    @Override
-//    public void setValueEventUser() {
-//        final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference idRef = rootRef.child(Constants.DB_USERS).child(StaticConfig.UID);
-//
-//        ValueEventListener userListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                listConfig.clear();
-//
-//                myAccount = dataSnapshot.getValue(User.class);
-//                setupArrayListInfo(myAccount);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        };
-//
-//        idRef.addListenerForSingleValueEvent(userListener);
-//    }
 }

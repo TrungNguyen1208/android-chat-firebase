@@ -3,6 +3,8 @@ package ptit.nttrung.chatusefirebase.service;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -144,6 +146,32 @@ public class FirebaseAuthService implements AuthSource {
 
                 auth.addAuthStateListener(listener);
                 auth.signOut();
+            }
+        });
+    }
+
+    @Override
+    public Completable resetEmail(final String email) {
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(final CompletableEmitter e) throws Exception {
+                if (auth == null) {
+                    auth = FirebaseAuth.getInstance();
+                }
+
+                auth.sendPasswordResetEmail(email)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                e.onComplete();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception t) {
+                                e.onError(t);
+                            }
+                        });
             }
         });
     }

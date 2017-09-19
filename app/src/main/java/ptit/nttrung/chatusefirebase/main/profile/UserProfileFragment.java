@@ -27,8 +27,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import ptit.nttrung.chatusefirebase.R;
 import ptit.nttrung.chatusefirebase.adapter.UserInfoAdapter;
+import ptit.nttrung.chatusefirebase.data.prefence.PrefenceUserInfo;
 import ptit.nttrung.chatusefirebase.model.Configuration;
 import ptit.nttrung.chatusefirebase.model.User;
+import ptit.nttrung.chatusefirebase.ulti.ActivityUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,27 +54,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     private List<Configuration> configList = new ArrayList<>();
     private User myAccount;
     private Context context;
-
-//    private ValueEventListener userListenner = new ValueEventListener() {
-//        @Override
-//        public void onDataChange(DataSnapshot dataSnapshot) {
-//            //Lấy thông tin của user về và cập nhật lên giao diện
-//            listConfig.clear();
-//            myAccount = dataSnapshot.getValue(User.class);
-//
-//            listConfig = presenter.setupArrayListInfo(myAccount);
-//            notifyDataSetChanged();
-//            setTextName(myAccount.getName());
-//
-//            PrefenceUserInfo preUserInfo = PrefenceUserInfo.getInstance(context);
-//            preUserInfo.saveUserInfo(myAccount);
-//        }
-//
-//        @Override
-//        public void onCancelled(DatabaseError databaseError) {
-//            Log.e(TAG, "loadPost:onCancelled", databaseError.toException());
-//        }
-//    };
+    private PrefenceUserInfo prefenceUserInfo;
 
     public UserProfileFragment() {
     }
@@ -90,6 +72,7 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
         unbinder = ButterKnife.bind(this, view);
 
         context = view.getContext();
+        prefenceUserInfo = PrefenceUserInfo.getInstance(context);
         return view;
     }
 
@@ -99,7 +82,6 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
         if (presenter == null) {
             presenter = new UserProfilePresenter(this, context);
         }
-
         myAccount = presenter.getUserInfoPrefence();
         configList = presenter.setupArrayListInfo(myAccount);
         setAdapterData(configList);
@@ -182,11 +164,11 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
     }
 
     @Override
-    public void showRenameDialog(final String name) {
+    public void showRenameDialog(final User myAccount) {
         View vewInflater = LayoutInflater.from(context)
                 .inflate(R.layout.dialog_edit_username, (ViewGroup) getView(), false);
         final EditText input = (EditText) vewInflater.findViewById(R.id.edit_username);
-        input.setText(name);
+        input.setText(myAccount.getName());
 
          /*Hiển thị dialog với dEitText cho phép người dùng nhập username mới*/
         new AlertDialog.Builder(context)
@@ -196,8 +178,8 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String newName = input.getText().toString();
-                        if (!name.equals(newName)) {
-                            presenter.onConfimRenameClick(newName);
+                        if (!myAccount.getName().equals(newName)) {
+                            presenter.onConfimRenameClick(myAccount, newName);
                         }
                         dialogInterface.dismiss();
                     }
@@ -208,6 +190,50 @@ public class UserProfileFragment extends Fragment implements UserProfileContract
                         dialogInterface.dismiss();
                     }
                 }).show();
+    }
+
+    @Override
+    public void showOkCofimDialog() {
+        ActivityUtils.alert(context, true, "Password",
+                "Are you sure want to reset password?",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        myAccount = prefenceUserInfo.getUserInfo();
+                        presenter.resetPassword(myAccount);
+                        dialog.dismiss();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+    }
+
+    @Override
+    public void showCofimDialogResetPass() {
+        ActivityUtils.showAlertCofirm(context, true, "Password Recovery",
+                "Sent email to " + myAccount.getEmail(),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+    }
+
+    @Override
+    public void showConfimDialogErrorSent() {
+        ActivityUtils.showAlertCofirm(context, true, "Fail",
+                "False to sent email to " + myAccount.getEmail(),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
     }
 
     @Override

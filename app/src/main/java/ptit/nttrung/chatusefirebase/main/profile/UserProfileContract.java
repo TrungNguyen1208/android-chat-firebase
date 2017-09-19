@@ -23,7 +23,13 @@ public interface UserProfileContract {
 
         void setTextName(String name);
 
-        void showRenameDialog(String name);
+        void showRenameDialog(User myAccount);
+
+        void showOkCofimDialog();
+
+        void showCofimDialogResetPass();
+
+        void showConfimDialogErrorSent();
 
         void notifyDataSetChanged(List<Configuration> configList);
     }
@@ -35,9 +41,11 @@ public interface UserProfileContract {
 
         void onResetPassLabelClick();
 
-        void onConfimRenameClick(String newName);
+        void onConfimRenameClick(User myAccount, String newName);
 
         List<Configuration> setupArrayListInfo(User myAccount);
+
+        void resetPassword(User myAccount);
 
         User getUserInfoPrefence();
 
