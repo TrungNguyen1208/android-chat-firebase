@@ -5,6 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ptit.nttrung.chatusefirebase.R;
 
 
@@ -155,5 +158,18 @@ public class ActivityUtils {
         adb.setPositiveButton(context.getString(R.string.yes), yes_onclicklistener);
         // adb.create();
         adb.show();
+    }
+
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+        String expression = "[a-zA-Z0-9._-]+@[a-z]+(\\.+[a-z]+)+";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
     }
 }

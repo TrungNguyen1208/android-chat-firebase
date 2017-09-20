@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity {
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mAdapter.addFrag(new FriendsFragment(), STR_FRIEND_FRAGMENT);
         mAdapter.addFrag(new UserProfileFragment(), STR_INFO_FRAGMENT);
-//        fab.setOnClickListener(((FriendsFragment) mAdapter.getItem(0)).onClickFloatButton.getInstance(this));
+        fab.setOnClickListener(((FriendsFragment) mAdapter.getItem(0)).onClickFloatButton.getInstance(this));
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(2);
 
@@ -126,9 +126,14 @@ public class MainActivity extends BaseActivity {
                 // Change floatButton
                 if (mAdapter.getItem(position) instanceof FriendsFragment) {
                     fab.setVisibility(View.VISIBLE);
+                    fab.setOnClickListener(((FriendsFragment) mAdapter.getItem(position))
+                            .onClickFloatButton.getInstance(MainActivity.this));
                     fab.setImageResource(R.drawable.plus);
+
                 } else if (mAdapter.getItem(position) instanceof UserProfileFragment) {
                     fab.setVisibility(View.GONE);
+                } else {
+
                 }
             }
 

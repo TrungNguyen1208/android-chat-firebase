@@ -18,7 +18,8 @@
         <activity android:name=".register.RegisterActivity" />
         <activity
             android:name=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".chat.ChatActivity"></activity>
     </application>
 
 </manifest>
