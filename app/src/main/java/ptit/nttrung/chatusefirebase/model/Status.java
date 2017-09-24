@@ -13,12 +13,12 @@ public class Status {
         timestamp = 0;
     }
 
-    public boolean isOnline() {
+    public boolean getIsOnline() {
         return isOnline;
     }
 
-    public void setOnline(boolean online) {
-        isOnline = online;
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 
     public long getTimestamp() {

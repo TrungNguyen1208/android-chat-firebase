@@ -15,7 +15,7 @@ public class User {
     public User() {
         status = new Status();
         message = new Message();
-        status.setOnline(false);
+        status.setIsOnline(false);
         status.setTimestamp(0);
         message.setIdReceiver("0");
         message.setIdSender("0");

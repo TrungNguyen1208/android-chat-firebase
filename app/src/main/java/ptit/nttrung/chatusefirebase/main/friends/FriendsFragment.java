@@ -3,6 +3,7 @@ package ptit.nttrung.chatusefirebase.main.friends;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,13 +174,13 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         intent.putCharSequenceArrayListExtra(StaticConfig.INTENT_KEY_CHAT_ID, idFriend);
                         intent.putExtra(StaticConfig.INTENT_KEY_CHAT_ROOM_ID, idRoom);
 
-//                        ChatActivity.bitmapAvataFriend = new HashMap<>();
-//                        if (!avata.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-//                            byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
-//                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-//                        } else {
-//                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
-//                        }
+                        ChatActivity.bitmapAvataFriend = new HashMap<>();
+                        if (!avata.equals(StaticConfig.STR_DEFAULT_BASE64)) {
+                            byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
+                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+                        } else {
+                            ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_avata));
+                        }
 
                         mapMark.put(id, null);
                         startActivityForResult(intent, FriendsFragment.ACTION_START_CHAT);
