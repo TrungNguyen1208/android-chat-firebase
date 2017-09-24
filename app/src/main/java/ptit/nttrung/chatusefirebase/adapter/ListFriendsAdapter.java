@@ -182,7 +182,7 @@ public class ListFriendsAdapter extends RecyclerView.Adapter<ListFriendsAdapter.
                     if (dataSnapshot.getValue() != null && dataSnapshot.getKey().equals("isOnline")) {
                         Log.d("FriendsFragment add " + id, (boolean) dataSnapshot.getValue() + "");
                         listFriend.getListFriend().get(position)
-                                .getStatus().setOnline((boolean) dataSnapshot.getValue());
+                                .getStatus().setIsOnline((boolean) dataSnapshot.getValue());
                         notifyDataSetChanged();
                     }
                 }
@@ -193,7 +193,7 @@ public class ListFriendsAdapter extends RecyclerView.Adapter<ListFriendsAdapter.
                     if (dataSnapshot.getValue() != null && dataSnapshot.getKey().equals("isOnline")) {
                         Log.d("FriendsFragment add " + id, (boolean) dataSnapshot.getValue() + "");
                         listFriend.getListFriend().get(position)
-                                .getStatus().setOnline((boolean) dataSnapshot.getValue());
+                                .getStatus().setIsOnline((boolean) dataSnapshot.getValue());
                         notifyDataSetChanged();
                     }
                 }
@@ -217,7 +217,7 @@ public class ListFriendsAdapter extends RecyclerView.Adapter<ListFriendsAdapter.
         }
 
         //Online
-        if (listFriend.getListFriend().get(position).getStatus().isOnline()) {
+        if (listFriend.getListFriend().get(position).getStatus().getIsOnline()) {
             holder.iconAvata.setBorderWidth(10);
         } else {
             holder.iconAvata.setBorderWidth(0);
